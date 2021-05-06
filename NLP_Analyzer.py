@@ -1,7 +1,6 @@
-import json
+
 
 import spacy
-import flask
 
 # Tutorial https://stackabuse.com/python-for-nlp-parts-of-speech-tagging-and-named-entity-recognition/
 
@@ -9,8 +8,7 @@ import flask
 # installing es_core_news_sm(spanish): conda install -c conda-forge spacy-model-es_core_news_sm
 #                                      conda install -c conda-forge/label/cf202003 spacy-model-es_core_news_sm
 #                                      python -m spacy download es_core_news_sm
-from flask import jsonify
-from spacy.lang.es.examples import sentences
+
 
 
 class NlpAnalyzer:
@@ -34,21 +32,10 @@ class NlpAnalyzer:
         return result
 
 
-nlp_api = flask.Flask(__name__)
-nlp_api.config["DEBUG"] = False
 
 
-@nlp_api.route('/nlp/analyze', methods=['GET'])
-def compare():
-    nlp_analizer = NlpAnalyzer()
-    nlp_analizer.init_nlp("english")
 
-    return jsonify(nlp_analizer.find_names())
-
-nlp_api.run()
-
-'''
 nlp_analizer = NlpAnalyzer()
 nlp_analizer.init_nlp("english")
 
-nlp_analizer.find_names()'''
+nlp_analizer.find_names()
