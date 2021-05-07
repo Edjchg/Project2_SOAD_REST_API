@@ -106,6 +106,3 @@ nlp_analizer = NlpAnalyzer()
 nlp_analizer.init_nlp("english")
 nlp_analizer.analyze_file("textoprueba.txt")
 nlp_analizer.delete_file("README.md")
-
-for person in nlp_analizer.get_people():
-    print(person.name, person.times)
