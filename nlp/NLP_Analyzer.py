@@ -65,6 +65,7 @@ class NlpAnalyzer:
                     new_person.add_times()
                     self.people_finded.append(new_person)
                 else:
+
                     for person in self.people_finded:
                         if entity == person.name:
                             person.add_times()
@@ -73,8 +74,19 @@ class NlpAnalyzer:
                             new_person.set_name(entity)
                             new_person.add_times()
                             self.people_finded.append(new_person)
+                            break
+
         else:
             pass
+
+    def is_in_list(self, entity):
+        flag = False
+        for person in self.people_finded:
+            if entity == person.name:
+                flag = True
+                break
+        return flag
+
 
     def get_people(self):
 
@@ -94,3 +106,6 @@ nlp_analizer = NlpAnalyzer()
 nlp_analizer.init_nlp("english")
 nlp_analizer.analyze_file("textoprueba.txt")
 nlp_analizer.delete_file("README.md")
+
+for person in nlp_analizer.get_people():
+    print(person.name, person.times)
