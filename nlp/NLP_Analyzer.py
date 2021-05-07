@@ -2,6 +2,7 @@ import io
 import os
 import PyPDF4
 import spacy
+from Person import *
 
 
 # Tutorial https://stackabuse.com/python-for-nlp-parts-of-speech-tagging-and-named-entity-recognition/
@@ -15,6 +16,7 @@ import spacy
 class NlpAnalyzer:
     def __init__(self):
         self.nlp = None
+        self.people_finded = []
 
     def init_nlp(self, language):
         if language == "english":
@@ -32,7 +34,7 @@ class NlpAnalyzer:
         return result
 
     def analyze_file(self, file):
-        file = "tmp_files/"+file
+        file = "../tmp_files/"+file
         if os.path.exists(file):
             _, file_extension = os.path.splitext(file)
             file_to_analyze = open(file, 'r')
@@ -40,19 +42,47 @@ class NlpAnalyzer:
                 lines = file_to_analyze.readlines()
                 for line in lines:
                     print(self.find_names(line))
+                    list_of_spans = self.find_names(line)
+                    self.save_span(list_of_spans)
             elif file_extension == ".pdf":
                 pdf_file = open(file, 'rb')
                 pdf_reader = PyPDF4.PdfFileReader(pdf_file)
                 for i in range(pdf_reader.getNumPages()):
                     page = pdf_reader.getPage(i).extractText().split(",")
                     for line in page:
-                        print(self.find_names(line))
-            return "Finished"
+                        list_of_spans = self.find_names(line)
+                        self.save_span(list_of_spans)
+            return self.get_people()
         else:
             return "This file does not exists."
 
+    def save_span(self, list_entities):
+        if len(list_entities) != 0:
+            for entity in list_entities:
+                if len(self.people_finded) == 0:
+                    new_person = Person()
+                    new_person.set_name(entity)
+                    new_person.add_times()
+                    self.people_finded.append(new_person)
+                else:
+                    for person in self.people_finded:
+                        if entity == person.name:
+                            person.add_times()
+                        else:
+                            new_person = Person()
+                            new_person.set_name(entity)
+                            new_person.add_times()
+                            self.people_finded.append(new_person)
+        else:
+            pass
+
+    def get_people(self):
+
+        return self.people_finded
+
+
     def delete_file(self, file):
-        file = "tmp_files/"+file
+        file = "../tmp_files/"+file
         if os.path.exists(file):
             os.remove(file)
             return "File deleted"
