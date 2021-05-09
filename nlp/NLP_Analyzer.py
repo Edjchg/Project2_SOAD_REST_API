@@ -10,7 +10,8 @@ from Person import *
 # installing en_core_web_sm(english): conda install -c conda-forge spacy-model-en_core_web_sm
 # installing es_core_news_sm(spanish): conda install -c conda-forge spacy-model-es_core_news_sm
 #                                      conda install -c conda-forge/label/cf202003 spacy-model-es_core_news_sm
-#                                      python -m spacy download es_core_news_sm
+#                                      python3 -m spacy download es_core_news_sm
+#                                      python3 -m spacy download en_core_web_sm
 
 
 class NlpAnalyzer:
@@ -100,9 +101,8 @@ class NlpAnalyzer:
             return "File deleted"
         else:
             return "The file does not exist"
-
-
+'''
 nlp_analizer = NlpAnalyzer()
 nlp_analizer.init_nlp("english")
 nlp_analizer.analyze_file("textoprueba.txt")
-nlp_analizer.delete_file("README.md")
+nlp_analizer.delete_file("README.md")'''
