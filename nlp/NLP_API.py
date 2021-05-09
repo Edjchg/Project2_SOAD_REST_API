@@ -3,7 +3,7 @@ import json
 import flask
 from flask import jsonify, request
 from NLP_Analyzer import NlpAnalyzer
-from nlp.Person import Person
+from Person import Person
 
 nlp_api = flask.Flask(__name__)
 nlp_api.config["DEBUG"] = False
@@ -25,9 +25,11 @@ def analyze_file():
     else:
         return "No file declaration"
 
+
 @nlp_api.route('/nlp/compare', methods=['GET'])
 def compare_mongo():
     return "Compare"
+
 
 @nlp_api.route('/nlp/delete', methods=['GET'])
 def delete_file():
@@ -39,6 +41,6 @@ def delete_file():
         return "No file declaration"
 
 
-nlp_api.run()
+nlp_api.run(host='0.0.0.0')
 
 # http://127.0.0.1:5000/nlp/analyze?file=textoprueba.txt
