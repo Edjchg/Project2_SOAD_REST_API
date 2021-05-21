@@ -74,11 +74,11 @@ def download(container_name, filename):
     container_client = blob_service_client.get_container_client(container_name)
     blobs = container_client.list_blobs()
 
-    _create_dirs("../tempfile/")
+    _create_dirs("tempfile/")
 
     for blob in blobs:
         if blob.name == filename:
-            fname = os.path.join("../tempfile/", blob.name)
+            fname = os.path.join("tempfile/", blob.name)
             client = blob_service_client.get_blob_client(container_name, blob)
             with open(fname, "wb") as download_file:
                 download_file.write(client.download_blob().readall())
