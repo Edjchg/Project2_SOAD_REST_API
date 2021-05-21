@@ -39,4 +39,8 @@ def dowload_file():
     return response
 
 
+@storage_api.route('/ping')
+def ping():
+    return 'PONG', 200
+
 storage_api.run(host='0.0.0.0')
