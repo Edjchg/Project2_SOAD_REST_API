@@ -6,19 +6,19 @@ storage_api = flask.Flask(__name__)
 storage_api.config["DEBUG"] = False
 
 
-@storage_api.route('/test/', methods=['GET'])
+@storage_api.route('/test/', methods=['GET'], strict_slashes=False)
 def api_home():
     return "Hello from Storage API"
 
 
-@storage_api.route('/newuser/', methods=['POST'])
+@storage_api.route('/newuser/', methods=['POST'],strict_slashes=False)
 def new_container():
     container_name = request.args['name']
     response = create_container(container_name)
     return response
 
 
-@storage_api.route('/upload/', methods=['POST'])
+@storage_api.route('/upload/', methods=['POST'], strict_slashes=False)
 def new_file():
     if 'file' not in request.files:
         print("No file detected")
@@ -30,7 +30,7 @@ def new_file():
     return response
 
 
-@storage_api.route('/download/', methods=['POST'])
+@storage_api.route('/download/', methods=['POST'], strict_slashes=False)
 def dowload_file():
     container_name = request.args["user"]
     filename = request.args["filename"]
