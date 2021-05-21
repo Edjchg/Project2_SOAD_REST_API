@@ -35,7 +35,8 @@ class NlpAnalyzer:
         return result
 
     def analyze_file(self, file):
-        file = "../nlp/tmp_files"+file
+        path_ = os.path.dirname(__file__) + "/tmp_files/"
+        file = path_+file
         if os.path.exists(file):
             _, file_extension = os.path.splitext(file)
             file_to_analyze = open(file, 'r')
@@ -95,7 +96,8 @@ class NlpAnalyzer:
 
 
     def delete_file(self, file):
-        file = "../nlp/tmp_files"+file
+        path_ = os.path.dirname(__file__) + "/tmp_files/"
+        file = path_+file
         if os.path.exists(file):
             os.remove(file)
             return "File deleted"
