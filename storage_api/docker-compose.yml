@@ -24,3 +24,4 @@ services:
 
 volumes:
   shared_files:
+    external: true
