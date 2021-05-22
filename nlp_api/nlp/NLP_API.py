@@ -7,7 +7,7 @@ from Person import Person
 
 nlp_api = flask.Flask(__name__)
 nlp_api.config["DEBUG"] = False
-nlp_analizer = NlpAnalyzer()
+
 
 
 @nlp_api.route('/', methods=['GET'], strict_slashes=False)
@@ -19,6 +19,7 @@ def hello_from_nlp():
 def analyze_file():
     if 'file' in request.args:
         file = request.args['file']
+        nlp_analizer = NlpAnalyzer()
         nlp_analizer.init_nlp("english")
         jsonStr = json.dumps([Person.__dict__ for Person in nlp_analizer.analyze_file(file)])
         return jsonify(jsonStr)
@@ -34,6 +35,7 @@ def compare_mongo():
 @nlp_api.route('/nlp/delete', methods=['GET'], strict_slashes=False)
 def delete_file():
     if 'file' in request.args:
+    	nlp_analizer = NlpAnalyzer()
         file = request.args['file']
         nlp_analizer.delete_file(file)
         return "File deleted"
