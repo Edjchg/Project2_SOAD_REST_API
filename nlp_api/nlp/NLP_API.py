@@ -9,7 +9,6 @@ nlp_api = flask.Flask(__name__)
 nlp_api.config["DEBUG"] = False
 
 
-
 @nlp_api.route('/', methods=['GET'], strict_slashes=False)
 def hello_from_nlp():
     return "Hello from NLP REST API, http://127.0.0.1:5000/nlp/analyze?file=textoprueba.txt"
@@ -35,7 +34,7 @@ def compare_mongo():
 @nlp_api.route('/nlp/delete', methods=['GET'], strict_slashes=False)
 def delete_file():
     if 'file' in request.args:
-    	nlp_analizer = NlpAnalyzer()
+        nlp_analizer = NlpAnalyzer()
         file = request.args['file']
         nlp_analizer.delete_file(file)
         return "File deleted"
