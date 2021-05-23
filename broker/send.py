@@ -23,3 +23,9 @@ channel.basic_consume(queue='hello_server_response', on_message_callback=callbac
 channel.start_consuming()
 
 connection.close()
+
+'''
+import sys
+
+print('Number of arguments: {}'.format(len(sys.argv)))
+print('Argument(s) passed: {}'.format(str(sys.argv[1])))'''
