@@ -17,6 +17,7 @@ class rpcReciever:
         self.channel.exchange_declare(exchange=self.EXCHANGE, exchange_type='direct')
 
     def nlp_callback(self, ch, method, props, body):
+        # Api
         ch.basic_publish(exchange='',
                          routing_key=props.reply_to,
                          properties=pika.BasicProperties(correlation_id= \
@@ -25,6 +26,7 @@ class rpcReciever:
         ch.basic_ack(delivery_tag=method.delivery_tag)
         print(body)
     def storage_callback(self, ch, method, props, body):
+        # Api
         ch.basic_publish(exchange='',
                          routing_key=props.reply_to,
                          properties=pika.BasicProperties(correlation_id=props.correlation_id),
@@ -36,9 +38,10 @@ class rpcReciever:
         # Connecting routing keys with queues
 
         for i in range(0, len(self.queues)):
-            self.channel.queue_declare(queue=self.routing_keys[i])
+            pass
+            # self.channel.queue_declare(queue=self.routing_keys[i])
+            self.channel.queue_declare(queue=self.queues[i])
             self.channel.queue_bind(exchange=self.EXCHANGE, queue=self.queues[i], routing_key=self.routing_keys[i])
-
             self.channel.basic_consume(queue=self.queues[i], on_message_callback=self.functions[self.queues[i]])
 
         #self.channel.basic_qos(prefetch_count=2)

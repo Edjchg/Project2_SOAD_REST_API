@@ -1,7 +1,7 @@
 import pika
 import uuid
 
-
+# 5672
 class rpcRequester:
     def __init__(self, host='localhost'):
         self.EXCHANGE = "broker"
@@ -58,5 +58,7 @@ class rpcRequester:
 
 req = rpcRequester()
 print(req.GET_nlp_analyze("asd"))
-#print(req.GET_storage("sdfsdfdf"))
+print(req.GET_storage("sdfsdfdf"))
 req.connection.close()
+
+#https://dev.to/usamaashraf/microservices--rabbitmq-on-docker-e2f
