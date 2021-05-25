@@ -6,8 +6,7 @@ services:
     - "5001:5000"
     volumes:
     - shared_files:/storage_api/tempfile
-  app2:
-    build: ./storage_api
+  App2:c    build: ./storage_api
     ports:
     - "5002:5000"
     volumes:
