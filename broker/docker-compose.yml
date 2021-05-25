@@ -1,0 +1,68 @@
+#version: '3'
+#services:
+#  broker:
+#    build: ./broker_src
+#    ports:
+#    - "5672:5672"
+#    - "15672:15672"
+#    networks:
+#    - rabbitmq_go_net
+#networks:
+#  rabbitmq_go_net:
+#    driver: bridge
+version: "3.2"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    command: rabbitmq-server
+    ports:
+        - 5673:5673
+        - 5672:5672
+        - 15672:15672
+    expose:
+      - "5672"
+      - "15672"
+    networks:
+        - rabbitmq_go_net
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5672"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  #broker_src:
+  #  build: ./broker_src
+    #environment:
+    #  - spring_rabbitmq_host=rabbitmq-container
+    #  - spring_rabbitmq_port=5672
+    #  - spring_rabbitmq_username=guest
+    #  - spring_rabbitmq_password=guest
+    #  - resolute_rabbitmq_publishQueueName=resolute-run-request
+    #  - resolute_rabbitmq_exchange=resolute
+    #ports:
+    #- 5672:5672
+    #- 15672:15672
+  #  restart: on-failure
+    #depends_on:
+    #  rabbitmq:
+    #    condition: service_healthy
+    #tty: true
+    #networks:
+    #  - rabbitmq_go_net
+    #ports:
+    #  - 8080:8080
+
+
+networks:
+  rabbitmq_go_net:
+    #driver: bridge
+    external:
+      name: rabbitmq_go_net
+
+#docker network create rabbitmq_go_net
+#sudo docker-compose up -d --build
+
+#sudo service rabbitmq-server start
+#sudo service rabbitmq-server stop
+
+#
