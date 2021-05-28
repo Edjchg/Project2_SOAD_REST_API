@@ -1,63 +1,50 @@
-#version: '3'
-#services:
-#  broker:
-#    build: ./broker_src
-#    ports:
-#    - "5672:5672"
-#    - "15672:15672"
-#    networks:
-#    - rabbitmq_go_net
-#networks:
-#  rabbitmq_go_net:
-#    driver: bridge
+
 version: "3.2"
 services:
+  # Building the rabbitmq service:
   rabbitmq:
+    # Pulling the image with rabbitmq:
     image: rabbitmq:3-management-alpine
+    # Naming the container:
     container_name: 'rabbitmq'
-    command: rabbitmq-server
+    # Exporting the required ports:
     ports:
-        - 5673:5673
-        - 5672:5672
-        - 15672:15672
-    expose:
-      - "5672"
-      - "15672"
+        - '5673:5673'
+        - '5672:5672'
+        - '15672:15672'
+    # Assigning the network to the container:
     networks:
-        - rabbitmq_go_net
+      - network
+    # Checking the health of the server by trying conections:
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "5672"]
+      test: ["CMD", "nc", "-z", "localhost", "15672"]
       interval: 5s
       timeout: 5s
       retries: 30
-  #broker_src:
-  #  build: ./broker_src
-    #environment:
-    #  - spring_rabbitmq_host=rabbitmq-container
-    #  - spring_rabbitmq_port=5672
-    #  - spring_rabbitmq_username=guest
-    #  - spring_rabbitmq_password=guest
-    #  - resolute_rabbitmq_publishQueueName=resolute-run-request
-    #  - resolute_rabbitmq_exchange=resolute
-    #ports:
-    #- 5672:5672
-    #- 15672:15672
-  #  restart: on-failure
-    #depends_on:
-    #  rabbitmq:
-    #    condition: service_healthy
-    #tty: true
-    #networks:
-    #  - rabbitmq_go_net
-    #ports:
-    #  - 8080:8080
+  # Building the brocker service:
+  broker_src:
+    # Calling the Dockerfile inside broker_src for building the container:
+    build: ./broker_src
+    environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "rabbitmq" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=20&retry_delay=5'
+    # This command stablish that this container is ready only when rabbitmq service is up:
+    depends_on:
+       rabbitmq:
+        condition: service_healthy
+    # Assigning the network to the container:
+    networks:
+      - network
 
-
+# Defining the common network
 networks:
-  rabbitmq_go_net:
-    #driver: bridge
-    external:
-      name: rabbitmq_go_net
+  network:
+    external: true
+
+# Some useful commands:
 
 #docker network create rabbitmq_go_net
 #sudo docker-compose up -d --build
@@ -65,4 +52,4 @@ networks:
 #sudo service rabbitmq-server start
 #sudo service rabbitmq-server stop
 
-#
+#docker exec -it faa ping another;      para hacer ping entre containers
