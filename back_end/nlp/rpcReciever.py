@@ -18,7 +18,7 @@ class rpcReciever:
         self.connection = None
         self.channel = None
         self.queues = ['nlp_analyze', 'nlp_compare']
-        self.routing_keys = ['analyze_rk', 'storage_rk']
+        self.routing_keys = ['analyze_rk', 'compare_rk']
         self.functions = {
             'nlp_analyze': self.analyze_file,
             'nlp_compare': self.compare_bt_databases
@@ -40,14 +40,14 @@ class rpcReciever:
                          body=response)
         ch.basic_ack(delivery_tag=method.delivery_tag)
         print(body)
-        self.delete_file(body)
+        #self.delete_file(body)
 
     def delete_file(self, file):
         nlp_analizer = NlpAnalyzer()
         nlp_analizer.delete_file(file)
 
     def compare_bt_databases(self, ch, method, props, body):
-        response = "Compare"
+        response = "Compare "+body.decode("utf-8")
         ch.basic_publish(exchange='',
                          routing_key=props.reply_to,
                          properties=pika.BasicProperties(correlation_id= \
