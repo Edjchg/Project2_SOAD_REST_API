@@ -41,12 +41,12 @@ class rpcRequester:
             self.connection.process_data_events()
         return self.response.decode("utf-8")
 
-    def GET_storage(self, file):
+    def GET_compare(self, file):
         self.response = None
         self.corr_id = str(uuid.uuid4())
         self.channel.basic_publish(
             exchange=self.EXCHANGE,
-            routing_key='storage_rk',
+            routing_key='compare_rk',
             properties=pika.BasicProperties(
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id,
@@ -58,7 +58,7 @@ class rpcRequester:
 
 req = rpcRequester()
 print(req.GET_nlp_analyze("textoprueba.txt"))
-#print(req.GET_storage("sdfsdfdf"))
+print(req.GET_compare("textoprueba.txt"))
 req.connection.close()
 
 #https://dev.to/usamaashraf/microservices--rabbitmq-on-docker-e2f
