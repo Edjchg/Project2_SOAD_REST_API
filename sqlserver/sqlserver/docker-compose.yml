@@ -1,0 +1,15 @@
+version: '3.3'
+
+services:
+  database:
+    build: ./
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=ProyectSOA123
+    volumes:
+      - database-data:/var/opt/mssql
+    ports:
+      - 1433:1433
+
+volumes:
+  database-data:
