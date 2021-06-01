@@ -2,13 +2,13 @@ import pika
 import uuid
 
 # 5672
-class rpcRequester:
+class storage_requester:
     def __init__(self, host='localhost'):
         self.EXCHANGE = "broker"
         self.RESPONSE = "broker_response"
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=host))
         self.channel = self.connection.channel()
-        self.queues = ['nlp', 'nlp_response' 'storage']
+        self.queues = ['storage_sas', 'storage_new_user']
 
         self.channel.exchange_declare(exchange=self.EXCHANGE, exchange_type='direct')
 
@@ -24,38 +24,26 @@ class rpcRequester:
             self.response = body
 
 
-    def GET_nlp_analyze(self, file):
+    def get_sas(self, id):
         self.response = None
         self.corr_id = str(uuid.uuid4())
+        id_ = "{\"id\": \"" + id + "\"}"
+        user_ = "{}"
         self.channel.basic_publish(
             exchange=self.EXCHANGE,
-            routing_key='analyze_rk',
+            routing_key='new_user_rk',
             properties=pika.BasicProperties(
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id,
             ),
-            body=file)
+            body=id_)
         while self.response is None:
             self.connection.process_data_events()
         return self.response.decode("utf-8")
 
-    def GET_compare(self, file):
-        self.response = None
-        self.corr_id = str(uuid.uuid4())
-        self.channel.basic_publish(
-            exchange=self.EXCHANGE,
-            routing_key='compare_rk',
-            properties=pika.BasicProperties(
-                reply_to=self.callback_queue,
-                correlation_id=self.corr_id,
-            ),
-            body=file)
-        while self.response is None:
-            self.connection.process_data_events()
-        return self.response
 
-req = rpcRequester()
-print(req.GET_nlp_analyze("textoprueba.txt"))
+req = storage_requester()
+print(req.get_sas("2"))
 #print(req.GET_compare("textoprueba.txt"))
 req.connection.close()
 
