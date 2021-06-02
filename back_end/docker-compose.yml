@@ -132,7 +132,19 @@ services:
     networks:
       - network
       - sql_net
-  
+
+    # __________________________Building the front api service__________________________
+  front_api:
+    build: ./translatorAPI
+    container_name: 'front_api'
+    ports:
+      - "4000:4000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - network
+
 
 # Defining the commons network
 networks:
