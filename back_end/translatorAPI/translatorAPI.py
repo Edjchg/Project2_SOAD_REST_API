@@ -1,27 +1,28 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from test import productos
+from requester_broker import requester_broker
 
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'application/json'
 
-@app.route('/Login', methods=['GET'])
+@app.route('/Login', methods=['GET'], strict_slashes=False)
 def get_Login():
-    if ((request.headers["user"] == "gaby") and (request.headers["password"] == "123")):
-        response = jsonify({"status": "ok"})
-    else:
-        response = jsonify({"status": "false"})
-    return response
+    user_ = request.headers["user"]
+    pass_ = request.headers["password"]
+    req = requester_broker(host='192.168.48.2')
+    response_ = req.get_login(user_, pass_)
+    req.connection.close()
+    return jsonify(response_)
 
-@app.route('/Books', methods=['GET'])
+@app.route('/Books', methods=['GET'], strict_slashes=False)
 def get_DocumentName():
     if((request.headers["user"]) == "gaby"):
         books = [{"name": "LOR"},{"name": "LOR2"},{"name": "LOR3"}]
         response = jsonify(books)
         return response
 
-@app.route('/Workers', methods=['GET'])
+@app.route('/Workers', methods=['GET'], strict_slashes=False)
 def get_Workers():
     requestDocument = request.headers["documentName"]
     if (requestDocument != ""):
@@ -41,7 +42,7 @@ def get_Workers():
         response = jsonify({"name": ""}) 
         return response   
 
-@app.route('/Progress', methods=['GET'])
+@app.route('/Progress', methods=['GET'], strict_slashes=False)
 def get_Progress():
     if((request.headers["user"]) == "gaby"):
         progress = [{"document":"LOR", "progress": "100", "documentFeel": "Hapyy", "ofensiveContent": "No"},
@@ -53,4 +54,4 @@ def get_Progress():
 
 #Se ejecuta el api
 if __name__ == '__main__':
-    app.run(debug=True, port=4000)
+    app.run(port=4000, host='0.0.0.0')
