@@ -44,7 +44,7 @@ class storage_requester:
 
 
 req = storage_requester()
-print(req.get_login("TI-FD", "12345"))
+print(req.get_login("TI-FD", "123456"))
 #print(req.GET_compare("textoprueba.txt"))
 req.connection.close()
 

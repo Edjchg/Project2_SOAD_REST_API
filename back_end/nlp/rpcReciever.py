@@ -93,8 +93,8 @@ class rpcReciever:
         return flag
 
 
-ser = rpcReciever('172.19.0.2')
-response = requests.get("http://172.19.0.2:15672/#/queues")
+ser = rpcReciever('192.168.48.2')
+response = requests.get("http://192.168.48.2:15672/#/queues")
 print("Waiting for the server to start")
 while not ser.get_connection():
     pass

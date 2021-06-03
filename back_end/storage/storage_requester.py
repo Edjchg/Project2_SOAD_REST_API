@@ -28,10 +28,9 @@ class storage_requester:
         self.response = None
         self.corr_id = str(uuid.uuid4())
         id_ = "{\"id\": \"" + id + "\"}"
-        user_ = "{}"
         self.channel.basic_publish(
             exchange=self.EXCHANGE,
-            routing_key='new_user_rk',
+            routing_key='sas_rk',
             properties=pika.BasicProperties(
                 reply_to=self.callback_queue,
                 correlation_id=self.corr_id,

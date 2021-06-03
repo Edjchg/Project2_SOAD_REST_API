@@ -67,7 +67,6 @@ class storage_receiver:
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-
 ser = storage_receiver('192.168.48.2')
 response = requests.get("http://192.168.48.2:15672/#/queues")
 print("Waiting for the server to start")
