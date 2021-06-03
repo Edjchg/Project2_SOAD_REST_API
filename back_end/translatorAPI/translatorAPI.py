@@ -17,40 +17,54 @@ def get_Login():
 
 @app.route('/Books', methods=['GET'], strict_slashes=False)
 def get_DocumentName():
-    if((request.headers["user"]) == "gaby"):
-        books = [{"name": "LOR"},{"name": "LOR2"},{"name": "LOR3"}]
-        response = jsonify(books)
-        return response
+    '''user_ = request.headers["user"]
+    req = requester_broker(host='192.168.48.2')
+    response_ = req.get_books(user_)
+    req.connection.close()
+    return jsonify(response_)'''
+    #formato de la respuesta [{"name": "LOR"},{"name": "LOR2"},{"name": "LOR3"}]
 
 @app.route('/Workers', methods=['GET'], strict_slashes=False)
 def get_Workers():
     requestDocument = request.headers["documentName"]
     if (requestDocument != ""):
-        if (requestDocument == "LOR"):
-            workers = [{"name": "gaby", "lastName": "avila"}]
-            response = jsonify(workers)
-            return response
-        elif (requestDocument == "LOR2"):
-            workers = [{"name": "isaac", "lastName": "ramirez"}]
-            response = jsonify(workers)
-            return response
-        elif (requestDocument == "LOR3"):
-            workers = [{"name": "andrey", "lastName": "garro"}]
-            response = jsonify(workers)
-            return response
+        req = requester_broker(host='192.168.48.2')
+        response_ = req.GET_compare(requestDocument)
+        req.connection.close() 
+        return jsonify(response_)
     else:
-        response = jsonify({"name": ""}) 
-        return response   
+        response_ = jsonify({"name": ""}) 
+        return response_   
+    #formato de la respuesta es [{"name": "", "lastName": ""}]
 
 @app.route('/Progress', methods=['GET'], strict_slashes=False)
 def get_Progress():
-    if((request.headers["user"]) == "gaby"):
-        progress = [{"document":"LOR", "progress": "100", "documentFeel": "Hapyy", "ofensiveContent": "No"},
-        {"document":"LOR2", "progress": "50", "documentFeel": "Angry", "ofensiveContent": "Si"},
-        {"document":"LOR3", "progress": "10", "documentFeel": "Ofensive", "ofensiveContent": "Si"}]
-        response = jsonify(progress)
-        return response
-    
+    '''user_ = request.headers["user"]
+    req = requester_broker(host='192.168.48.2')
+    response_ = req.GET_progress(user_)
+    req.connection.close()
+    return jsonify(response_)
+    '''
+    #formato de respuest [{"document":"LOR", "progress": "100", "documentFeel": "Hapyy", "ofensiveContent": "No"}]
+
+@app.route('/Link', methods=['GET'], strict_slashes=False)
+def get_Link():
+    id_ = "2"
+    req = requester_broker(host='192.168.48.2')
+    response_ = req.get_sas(id_)
+    req.connection.close() '''{"id": "xyz" }" '''
+    return jsonify(response_)
+
+@app.route('/Upload', methods=['GET'], strict_slashes=False)
+def get_Upload():
+    document_ = request.headers["documentName"]
+    req = requester_broker(host='192.168.48.2')
+    responseNLP_ = req.GET_nlp_analyze(document)
+    #responseFeeling_ = req.GET_feeling_analyze(document)
+    #responseContent_ = req.GET_Content_analyze(document)
+    req.connection.close()
+    response_ = [{"status": "ok"}]
+    return jsonify(response_)
 
 #Se ejecuta el api
 if __name__ == '__main__':

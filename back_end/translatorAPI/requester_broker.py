@@ -8,7 +8,7 @@ class requester_broker:
         self.RESPONSE = "broker_response"
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host=host))
         self.channel = self.connection.channel()
-        self.queues = ['login']
+        self.queues = ['login, nlp', 'nlp_response' 'storage', 'storage_sas', 'storage_new_user']
 
         self.channel.exchange_declare(exchange=self.EXCHANGE, exchange_type='direct')
 
@@ -40,3 +40,50 @@ class requester_broker:
         while self.response is None:
             self.connection.process_data_events()
         return self.response.decode("utf-8")
+
+    def get_sas(self, id):
+        self.response = None
+        self.corr_id = str(uuid.uuid4())
+        id_ = "{\"id\": \"" + id + "\"}"
+        user_ = "{}"
+        self.channel.basic_publish(
+            exchange=self.EXCHANGE,
+            routing_key='new_user_rk',
+            properties=pika.BasicProperties(
+                reply_to=self.callback_queue,
+                correlation_id=self.corr_id,
+            ),
+            body=id_)
+        while self.response is None:
+            self.connection.process_data_events()
+        return self.response.decode("utf-8")
+    
+    def GET_nlp_analyze(self, file):
+        self.response = None
+        self.corr_id = str(uuid.uuid4())
+        self.channel.basic_publish(
+            exchange=self.EXCHANGE,
+            routing_key='analyze_rk',
+            properties=pika.BasicProperties(
+                reply_to=self.callback_queue,
+                correlation_id=self.corr_id,
+            ),
+            body=file)
+        while self.response is None:
+            self.connection.process_data_events()
+        return self.response.decode("utf-8")
+
+    def GET_compare(self, file):
+        self.response = None
+        self.corr_id = str(uuid.uuid4())
+        self.channel.basic_publish(
+            exchange=self.EXCHANGE,
+            routing_key='compare_rk',
+            properties=pika.BasicProperties(
+                reply_to=self.callback_queue,
+                correlation_id=self.corr_id,
+            ),
+            body=file)
+        while self.response is None:
+            self.connection.process_data_events()
+        return self.response
