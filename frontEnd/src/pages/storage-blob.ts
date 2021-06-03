@@ -1,5 +1,4 @@
 import { BlobServiceClient, ContainerClient} from '@azure/storage-blob';
-import { setConstantValue } from 'typescript';
 
 
 const sasToken = process.env.storagesastoken || "sv=2020-02-10&ss=bfqt&srt=sco&sp=rwdlacupx&se=2021-04-24T05:47:07Z&st=2021-04-23T21:47:07Z&spr=https,http&sig=lAL%2BkPnSvQlvvO%2BUmasZBrnt2uERNYA%2F3UUJJSSi8jg%3D"; // Fill string with your SAS token
