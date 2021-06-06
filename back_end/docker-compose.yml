@@ -133,7 +133,7 @@ services:
       - network
       - sql_net
 
-    # __________________________Building the front api service__________________________
+  # __________________________Building the front api service__________________________
   front_api:
     build: ./translatorAPI
     container_name: 'front_api'
@@ -145,6 +145,34 @@ services:
     networks:
       - network
 
+  
+  # __________________________Building the mongo api service__________________________
+
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+    - PUID=1000
+    - PGID=1000
+    volumes:
+    - mongo_data:/data/db
+    ports:
+    - 27017:27017
+    restart: unless-stopped
+    networks: 
+      mongo_net: 
+        ipv4_address: 192.168.33.3
+
+  mongo_api: 
+    container_name: 'mongo_api'
+    build: ./mongo_api
+    ports: 
+      - "9081:9081"
+    depends_on: 
+      - mongodb
+    networks: 
+      mongo_net:
+
 
 # Defining the commons network
 networks:
@@ -155,12 +183,18 @@ networks:
       config:
         - subnet: 192.168.32.0/24
           gateway: 192.168.32.1
+  mongo_net: 
+    ipam:
+      config:
+        - subnet: 192.168.33.0/24
+          gateway: 192.168.33.1
 
 # Defining the commons volume
 volumes:
   shared_files:
     external: true
   mssqldata:
+  mongo_data:
 
 # Some useful commands:
 

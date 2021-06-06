@@ -15,7 +15,7 @@ def get_sas(type):
             account_key=ACCESS_KEY,
             resource_types=ResourceTypes(service=True, container=True, object=True),
             permission=AccountSasPermissions(read=True),
-            expiry=datetime.utcnow() + timedelta(minutes=5)
+            expiry=datetime.utcnow() + timedelta(minutes=480)
         )
     elif type == 1:  # Only write
         sas_token = generate_account_sas(
@@ -23,7 +23,7 @@ def get_sas(type):
             account_key=ACCESS_KEY,
             resource_types=ResourceTypes(service=True, container=True, object=True),
             permission=AccountSasPermissions(write=True),
-            expiry=datetime.utcnow() + timedelta(minutes=5)
+            expiry=datetime.utcnow() + timedelta(minutes=480)
         )
     else:  # Read, write and list
         sas_token = generate_account_sas(
@@ -31,15 +31,18 @@ def get_sas(type):
             account_key=ACCESS_KEY,
             resource_types=ResourceTypes(service=True, container=True, object=True),
             permission=AccountSasPermissions(write=True, read=True, list=True),
-            expiry=datetime.utcnow() + timedelta(minutes=5)
+            expiry=datetime.utcnow() + timedelta(minutes=480)
         )
     return sas_token
 
 
 def create_container(container_name):
-    credential = get_sas(1)
+    credential = get_sas(3)
     blob_service_client = BlobServiceClient(account_url="https://proyectosoa.blob.core.windows.net/",
                                             credential=credential)
+
+    print(blob_service_client.url)
+
     container_client = blob_service_client.get_container_client(container_name)
     response = ""
 
@@ -93,3 +96,6 @@ def _create_dirs(dest_path):
     elif not os.path.isdir(dest_path):
         shutil.rmtree(dest_path)
         os.makedirs(dest_path)
+
+
+create_container("test1")

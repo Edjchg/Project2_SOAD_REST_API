@@ -42,7 +42,7 @@ class storage_requester:
 
 
 req = storage_requester()
-print(req.get_sas("2"))
+print(req.get_sas("3"))
 #print(req.GET_compare("textoprueba.txt"))
 req.connection.close()
 
