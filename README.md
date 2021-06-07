@@ -1,7 +1,7 @@
 # Core diagrams
 
 ## Level 1: System Context diagram
-|![](images/System context.png)|
+|![](images/System_context.png)|
 |:--:|
 |**Figure 1**: System Context diagram.|
 
