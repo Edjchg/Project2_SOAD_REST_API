@@ -1,0 +1,35 @@
+version: '3.4'
+
+
+services:
+  api: 
+    container_name: sqlserver_api
+    build: ./databases
+    ports: 
+      - "9080:9080"
+    environment:
+      - ConnectionString=Data Source=server;Initial Catalog=proyect2_database;User Id=sa;Password=ProyectSOA123;Pooling=False;Max Pool Size=200;MultipleActiveResultSets=True
+    depends_on: 
+      - server
+    networks: 
+      - sql_net
+  
+  server:
+    container_name: sql_server
+    image: mcr.microsoft.com/mssql/server:latest
+    build: 
+      context: .
+      dockerfile: sqlserver/Dockerfile
+    ports: 
+      - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    networks: 
+      - sql_net 
+
+volumes:
+  mssqldata:
+
+networks: 
+  sql_net: 
+    external: True

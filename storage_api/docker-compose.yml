@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app1:
+    build: ./storage_api
+    ports:
+    - "5001:5000"
+    volumes:
+    - shared_files:/storage_api/tempfile
+  App2:
+    build: ./storage_api
+    ports:
+    - "5002:5000"
+    volumes:
+    - shared_files:/storage_api/tempfile
+  nginx:
+    build: ./nginx
+    ports:
+    - "8080:80"
+    volumes:
+    - shared_files:/storage_api/tempfile
+    depends_on:
+      - app1
+      - app2
+
+volumes:
+  shared_files:
+    external: true
