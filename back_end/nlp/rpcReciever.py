@@ -47,23 +47,17 @@ class rpcReciever:
         nlp_analizer.delete_file(file)
 
     def compare_bt_databases(self, ch, method, props, body):
-        response = "Compare "+body.decode("utf-8")
+        body = str(body.decode("utf-8"))
+        print(body)
+        response_ = requests.get("http://192.168.33.4:9081/database/mongodb/results/?filename=" + body)
+        print("resp: " + str(response_.content.decode("utf-8")))
         ch.basic_publish(exchange='',
                          routing_key=props.reply_to,
                          properties=pika.BasicProperties(correlation_id= \
                                                              props.correlation_id),
-                         body=response)
+                         body=str(response_.content.decode("utf-8")))
         ch.basic_ack(delivery_tag=method.delivery_tag)
-        print(body)
 
-    '''def storage_callback(self, ch, method, props, body):
-        # Api
-        ch.basic_publish(exchange='',
-                         routing_key=props.reply_to,
-                         properties=pika.BasicProperties(correlation_id=props.correlation_id),
-                         body="Hello from Storage")
-        ch.basic_ack(delivery_tag=method.delivery_tag)
-        print(body)'''
 
     def listen(self):
         # Connecting routing keys with queues

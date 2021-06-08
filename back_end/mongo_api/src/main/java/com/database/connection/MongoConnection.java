@@ -15,6 +15,7 @@ import org.bson.types.ObjectId;
 import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
@@ -65,7 +66,7 @@ public class MongoConnection {
 
         for(Document doc : listDocs){
             Person temp = new Person();
-            temp.set_name(doc.get("Name").toString());
+            temp.set_name(doc.get("Name").toString().toLowerCase());
             temp.set_times((int)doc.get("Spans"));
             listPerson.add(temp);
         }

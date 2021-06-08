@@ -7,6 +7,7 @@ services:
   rabbitmq:
     # Pulling the image with rabbitmq:
     image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
     # Naming the container:
     container_name: 'rabbitmq'
     # Exporting the required ports:
@@ -16,7 +17,8 @@ services:
         - '15672:15672'
     # Assigning the network to the container:
     networks:
-      - network
+      network:
+        ipv4_address: 192.168.48.2
     # Checking the health of the server by trying conections:
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "15672"]
@@ -43,6 +45,7 @@ services:
     # Assigning the network to the container:
     networks:
       - network
+      - mongo_net
 
   # _________________________________Building the nlp service (2)__________________________
 
@@ -63,6 +66,7 @@ services:
     # Assigning the network to the container:
     networks:
       - network
+      - mongo_net
     
   # __________________________Building the storage service (1) and (2)__________________________
 
@@ -172,12 +176,18 @@ services:
       - mongodb
     networks: 
       mongo_net:
+         ipv4_address: 192.168.33.4
+      sql_net:
+          ipv4_address: 192.168.32.4
 
 
 # Defining the commons network
 networks:
   network:
-    external: true
+    ipam:
+      config:
+        - subnet: 192.168.48.0/24
+          gateway: 192.168.48.1
   sql_net: 
     ipam:
       config:

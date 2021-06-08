@@ -55,8 +55,8 @@ class rpcRequester:
         return self.response
 
 req = rpcRequester()
-print(req.GET_nlp_analyze("textoprueba.txt"))
-#print(req.GET_compare("textoprueba.txt"))
+#print(req.GET_nlp_analyze("textoprueba.txt"))
+print(req.GET_compare("test"))
 req.connection.close()
 
 #https://dev.to/usamaashraf/microservices--rabbitmq-on-docker-e2f

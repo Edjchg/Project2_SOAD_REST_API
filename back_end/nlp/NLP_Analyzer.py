@@ -91,7 +91,6 @@ class NlpAnalyzer:
         return flag
 
     def get_people(self):
-
         return self.people_finded
 
     def delete_file(self, file):
