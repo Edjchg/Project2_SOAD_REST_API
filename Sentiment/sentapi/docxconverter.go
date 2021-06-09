@@ -1,4 +1,4 @@
-package readDocx
+package main
 
 import (
 	"fmt"
@@ -7,10 +7,11 @@ import (
 	"code.sajari.com/docconv"
 )
 
-func readDocx(file string) {
+func readDocx(file string) (content string) {
 	res, err := docconv.ConvertPath(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(res)
+	fmt.Printf(res)
+	return
 }

@@ -13,7 +13,7 @@ type Response struct {
 	Status int    `json:"status"`
 }
 
-func main() {
+func get() {
 	fmt.Println("Calling API...")
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "https://icanhazdadjoke.com/", nil)

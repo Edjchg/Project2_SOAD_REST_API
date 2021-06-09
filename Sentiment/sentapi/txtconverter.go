@@ -1,4 +1,4 @@
-package readtxt
+package main
 
 import (
 	"fmt"
@@ -6,14 +6,15 @@ import (
 	"log"
 )
 
-func readtxt(file string) {
+func readtxt(file string) (content string) {
 
 	// File to analyze.
-	content, err := ioutil.ReadFile(file)
+	res, err := ioutil.ReadFile(file)
 
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(string(content))
+	content = string(res)
+	return content
+	fmt.Println(string(res))
 }

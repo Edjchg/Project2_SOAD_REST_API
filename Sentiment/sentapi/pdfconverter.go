@@ -1,4 +1,4 @@
-package readPdf
+package main
 
 import (
 	"bytes"
