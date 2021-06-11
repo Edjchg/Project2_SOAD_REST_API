@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func readtxt(file string) (content string) {
+func readtxt(file string) string {
 
 	// File to analyze.
 	res, err := ioutil.ReadFile(file)
@@ -14,7 +14,9 @@ func readtxt(file string) (content string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	content = string(res)
-	return content
+	content := string(res)
+
 	fmt.Println(string(res))
+
+	return content
 }

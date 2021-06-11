@@ -1,23 +1,21 @@
-package main
+/*package main
 
 import (
 	"bytes"
-	"fmt"
 
 	"github.com/ledongthuc/pdf"
 )
 
-func readPdf(file string) {
-	content, err := ReadPlainTextFromPDF(file)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(content)
-	return
+func readPDF(pdfPath string) string {
+	content, _ := ReadPlainTextFromPDF(pdfPath)
+	return content
 }
 
 func ReadPlainTextFromPDF(pdfpath string) (text string, err error) {
 	f, r, err := pdf.Open(pdfpath)
+	if err != nil {
+		panic(err)
+	}
 	defer f.Close()
 	if err != nil {
 		return
@@ -32,4 +30,23 @@ func ReadPlainTextFromPDF(pdfpath string) (text string, err error) {
 	buf.ReadFrom(b)
 	text = buf.String()
 	return
+}*/
+
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"code.sajari.com/docconv"
+)
+
+func readPDF(file string) string {
+	res, err := docconv.ConvertPath(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	content := fmt.Sprint(res)
+	fmt.Println(res)
+	return content
 }

@@ -1,4 +1,4 @@
-module soa.com/sentapi
+module soa.com/main
 
 go 1.16
 
@@ -12,6 +12,7 @@ require (
 	github.com/levigross/exp-html v0.0.0-20120902181939-8df60c69a8f5 // indirect
 	github.com/lu4p/cat v0.1.5 // indirect
 	github.com/nguyenthenguyen/docx v0.0.0-20201105043207-fda3c29a0605 // indirect
+	github.com/streadway/amqp v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.5.3 // indirect
 	golang.org/x/net v0.0.0-20210525063256-abc453219eb5 // indirect
 	golang.org/x/sys v0.0.0-20210603125802-9665404d3644 // indirect

@@ -7,11 +7,12 @@ import (
 	"code.sajari.com/docconv"
 )
 
-func readDocx(file string) (content string) {
+func readDocx(file string) string {
 	res, err := docconv.ConvertPath(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf(res)
-	return
+	content := fmt.Sprint(res)
+	fmt.Println(res)
+	return content
 }
