@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { makeStyles, withStyles, InputLabel, MenuItem, FormControl, Select, Button,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, } from '@material-ui/core';
+import { BlobServiceClient } from '@azure/storage-blob';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -31,8 +32,20 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-function createData(name, lastName) {
-  return { name, lastName };
+function createBook(name) {
+  return { name };
+}
+
+export const getBlobNames = async (sas, contName) => {
+  const blobService = new BlobServiceClient(
+    `https://proyectosoa.blob.core.windows.net/?${sas}`
+  );
+  const containerClient = blobService.getContainerClient(contName);
+  const blobNames = [];
+  for await (const blob of containerClient.listBlobsFlat()) {
+    blobNames.push(blob.name);
+  }
+  return blobNames;
 }
 
 const WorkerList = () => {
@@ -40,21 +53,30 @@ const WorkerList = () => {
   const [book, setBook] = React.useState('');
   const [rowsBook, set_rowsBook] = React.useState([]);
   const [rowsWorkers, set_rowsWorkers] = React.useState([]);
+  
   const handleChange = (event) => {
     setBook(event.target.value);
   };
 
-  useEffect(async () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(async() => {
+    const user = localStorage.getItem("account");
     const response = await fetch('http://localhost:4000/Books', {
       method: 'GET',
       headers : {
-        Accept: '*/*',
+        Accept: '/*',
         'Content-Type': 'text/plain',
         user: localStorage.getItem("account")
       },
     });
     const json = await response.json();
-    set_rowsBook(json);
+    let list = [];
+    let listBooks = [];
+    list = await getBlobNames(json.sas, user);
+    for(var i =0; i < list.length; i++){
+      listBooks[i] = createBook(list[i]);
+    }
+    set_rowsBook(listBooks);
   }, []);
 
   const handleOpen = async () => {
@@ -94,7 +116,6 @@ const WorkerList = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell >Last Name</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -103,7 +124,6 @@ const WorkerList = () => {
                 <StyledTableCell component="th" scope="row">
                   {row.name}
                 </StyledTableCell>
-                <StyledTableCell>{row.lastName}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

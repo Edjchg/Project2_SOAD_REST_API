@@ -71,7 +71,7 @@ const Login = () => {
                 <AccountCircleRoundedIcon color="disabled" style={{ fontSize: 100 }}/>
                 <TextField id="user" label="User" color="primary" name="user" onChange={handleInputChange}/>
                 <p></p>
-                <TextField id="password" label="Password" color="primary" name="password" onChange={handleInputChange}/>
+                <TextField type="password" id="password" label="Password" color="primary" name="password" onChange={handleInputChange}/>
                 <p></p>
                 <Button variant="contained" color="primary" type="submit">
                 Accept
