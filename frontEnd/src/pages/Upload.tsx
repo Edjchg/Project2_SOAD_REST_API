@@ -57,10 +57,11 @@ const UploadDocument = (): JSX.Element => {
                 Accept: '*/*',
                 'Content-Type': 'text/plain',
                 documentName: file,
+                user: containerName,
                 }});
         const json = await test.json(); 
         console.log(json); 
-        if (json[0].status == "ok"){
+        if (json[0].status === "ok"){
           console.log("aqui")
           setOpen(true);
         }          
