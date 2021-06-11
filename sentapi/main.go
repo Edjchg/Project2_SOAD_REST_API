@@ -20,7 +20,7 @@ func main() {
 	}
 	fmt.Println(pwd)
 	// Change "filesTest" for "TEMP_FILE"
-	path := pwd + "/" + "filesTest" + "/test.pdf"
+	path := pwd + "/" + "filesTest" + "/test.docx"
 
 	sentResult, scoreResult := sentapi(path)
 	//fmt.Printf(sentResult, scoreResult)
